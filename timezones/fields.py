@@ -23,7 +23,7 @@ class TimeZoneField(models.CharField):
         defaults = {
             "max_length": MAX_TIMEZONE_LENGTH,
             "default": settings.TIME_ZONE,
-            "choices": zones.PRETTY_TIMEZONE_CHOICES
+            "choices": zones.AMERICA_FIRST_TIMEZONE_CHOICES
         }
         defaults.update(kwargs)
         return super(TimeZoneField, self).__init__(*args, **defaults)
