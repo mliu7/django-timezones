@@ -1,4 +1,5 @@
 from datetime import datetime
+from datetime import tzinfo
 import pytz
 
 from django.conf import settings
@@ -48,3 +49,26 @@ def validate_timezone_max_length(max_length, zones):
         return x and (len(y) <= max_length)
     if not reduce(reducer, zones, True):
         raise Exception("timezones.fields.TimeZoneField MAX_TIMEZONE_LENGTH is too small")
+
+
+def dst_isoformat(dt):
+    """ Returns the correct isoformat for a time with a timezone, accounting for the daylight savings time offset.
+
+    Input:
+        dt - A valid Python Datetime object with a valid timezone field
+
+    Output: 
+        A string representing the datetime in a isoformat
+
+    Notes:
+        The reason this function is necessary is that the .isoformat() method that is built into Python datetime
+        objects does not account for the daylight savings time offset when the timezone class is one of those
+        used from the pytz library
+    """
+    # Determine if dst is in effect for the time and update the utcoffset field accordingly
+    offset = dt.tzinfo.dst(dt.replace(tzinfo=None))
+    dt.tzinfo._utcoffset += offset
+    iso_string = dt.isoformat()
+    # Restore the tzinfo to how it was
+    dt.tzinfo._utcoffset -= offset
+    return iso_string
