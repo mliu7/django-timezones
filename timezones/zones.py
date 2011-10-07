@@ -3,7 +3,6 @@ from datetime import datetime
 import pytz
 
 
-
 ALL_TIMEZONE_CHOICES = tuple(zip(pytz.all_timezones, pytz.all_timezones))
 COMMON_TIMEZONE_CHOICES = tuple(zip(pytz.common_timezones, pytz.common_timezones))
 PRETTY_TIMEZONE_CHOICES = []
@@ -18,4 +17,6 @@ AMERICA_TIMEZONE_CHOICES = [('US/Pacific',"(GMT-0700) US/Pacific"),
                             ('US/Mountain', "(GMT-0600) US/Mountain"),
                             ('US/Central', "(GMT-0500) US/Central"),
                             ('US/Eastern', "(GMT-0400) US/Eastern")]
-AMERICA_FIRST_TIMEZONE_CHOICES = AMERICA_TIMEZONE_CHOICES + ORDERED_TIMEZONE_CHOICES
+
+NON_AMERICA_TIMEZONE_CHOICES = [choice for choice in ORDERED_TIMEZONE_CHOICES if choice not in AMERICA_TIMEZONE_CHOICES]
+AMERICA_FIRST_TIMEZONE_CHOICES = AMERICA_TIMEZONE_CHOICES + NON_AMERICA_TIMEZONE_CHOICES
