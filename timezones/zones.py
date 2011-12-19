@@ -13,10 +13,15 @@ for tz in pytz.common_timezones:
 
 ORDERED_TIMEZONE_CHOICES = sorted(PRETTY_TIMEZONE_CHOICES, key=lambda c: (int(c[1][4:].split(')')[0]), c[0]))
 
-AMERICA_TIMEZONE_CHOICES = [('US/Pacific',"(GMT-0700) US/Pacific"),
-                            ('US/Mountain', "(GMT-0600) US/Mountain"),
-                            ('US/Central', "(GMT-0500) US/Central"),
-                            ('US/Eastern', "(GMT-0400) US/Eastern")]
+AMERICA_FIRST_TIMEZONE_CHOICES = ORDERED_TIMEZONE_CHOICES
 
-NON_AMERICA_TIMEZONE_CHOICES = [choice for choice in ORDERED_TIMEZONE_CHOICES if choice not in AMERICA_TIMEZONE_CHOICES]
-AMERICA_FIRST_TIMEZONE_CHOICES = AMERICA_TIMEZONE_CHOICES + NON_AMERICA_TIMEZONE_CHOICES
+for america_choice in ['US/Eastern', 'US/Central', 'US/Mountain', 'US/Pacific']:
+    for i, choice in enumerate(AMERICA_FIRST_TIMEZONE_CHOICES):
+        if america_choice in choice[1]:
+            # Pop it from its current position
+            AMERICA_FIRST_TIMEZONE_CHOICES.pop(i)
+
+            # Place it at the beginning
+            AMERICA_FIRST_TIMEZONE_CHOICES.insert(0, choice)
+
+            break
