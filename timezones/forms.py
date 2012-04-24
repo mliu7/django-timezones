@@ -10,8 +10,18 @@ from timezones.utils import adjust_datetime_to_timezone, coerce_timezone_value
 
 class TimeZoneField(forms.TypedChoiceField):
     def __init__(self, *args, **kwargs):
+        """ 
+        Field for selecing valid timezones.
+        
+        Kwargs:
+            all - If True, all of the timezones will be used. 
+                  If False, only the common timezones will be used
+        """
         if not "choices" in kwargs:
-            kwargs["choices"] = zones.AMERICA_FIRST_TIMEZONE_CHOICES
+            if kwargs.pop("all", False):
+                kwargs["choices"] = zones.ALL_TIMEZONE_CHOICES
+            else:
+                kwargs["choices"] = zones.AMERICA_FIRST_TIMEZONE_CHOICES
         kwargs["coerce"] = coerce_timezone_value
         super(TimeZoneField, self).__init__(*args, **kwargs)
 
